@@ -11,6 +11,7 @@ class App(models.Model):
     image = models.CharField(max_length=260)
     envs = models.JSONField(null=True, blank=True)
     command = models.CharField(max_length=360)
+    last_run = jmodels.jDateTimeField(null=True, blank=True)
     created_at = jmodels.jDateTimeField('created at', auto_now_add=True)
 
     def __str__(self):
@@ -23,14 +24,13 @@ class Container(models.Model):
         Each app can have multiple containers.
     '''
     class StatusChoices(models.TextChoices):
-        RUNNING = 'R', 'Running'
-        FINISHED = 'F', 'Finished'
+        RUNNING = 'running', 'Running'
+        FINISHED = 'finished', 'Finished'
 
     app = models.ForeignKey(App, on_delete=models.CASCADE)
     name = models.CharField(max_length=80)
     status = models.CharField(max_length=20, choices=StatusChoices.choices, default=StatusChoices.FINISHED)
     created_at = jmodels.jDateTimeField('created at', auto_now_add=True)
-    last_run = jmodels.jDateTimeField(auto_now=True)
 
     def __str__(self):
         return self.name
