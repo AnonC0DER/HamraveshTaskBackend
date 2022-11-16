@@ -8,10 +8,8 @@ schema_view = get_schema_view(
     openapi.Info(
         title='Hamravesh Backend Task',
         default_version='v1',
-        description='Hamravesh REST API documentation.',
-        terms_of_service='https://www.google.com/policies/terms/',
-        contact=openapi.Contact(email='contact@snippets.local'),
-        license=openapi.License(name='BSD License'),
+        description='Hamravesh Task REST APIs documentation.',
+        contact=openapi.Contact(email='hesam.norin@yahoo.com'),
     ),
     public=True,
     permission_classes=[permissions.AllowAny],
