@@ -16,6 +16,7 @@ class App(models.Model):
     last_run = jmodels.jDateTimeField(null=True, blank=True)
     created_at = jmodels.jDateTimeField('created at', auto_now_add=True)
     history = HistoricalRecords()
+    full_docker_command = models.CharField(max_length=360, null=True, blank=True, default=None)
 
     def __str__(self):
         return self.name

@@ -5,6 +5,7 @@ class AppSerializer(serializers.ModelSerializer):
     class Meta:
         model = App
         exclude = ['user']
+        read_only_fields = ['full_docker_command']
 
 
 class ContainerSerializer(serializers.ModelSerializer):

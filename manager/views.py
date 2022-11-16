@@ -2,6 +2,7 @@ from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIV
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
+from django.shortcuts import get_object_or_404
 from jdatetime import datetime
 from manager.serializers import AppSerializer, ContainerSerializer
 from manager.models import App, Container
@@ -30,7 +31,19 @@ class AppHistoryView(APIView):
 
     def get(self, request, pk):
         app = App.objects.get(id=pk)
-        return Response(app.get_history)
+        return Response(app.get_history, 200)
+
+
+class RunAppView(APIView):
+    # permission_classes = (IsAuthenticated,)
+
+    def get(self, request, pk):
+        app = get_object_or_404(App, id=pk)
+        container = Container.objects.create(app=app, name=app.image, status='running')
+        serializer = ContainerSerializer(container, many=False)
+        app.last_run = datetime.now()
+        app.save()
+        return Response(serializer.data, 200)
 
 
 class ContainerListView(APIView):
