@@ -1,13 +1,15 @@
 from rest_framework import serializers
 from manager.models import App, Container
 
-class ContainerSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Container
-        exclude = ['app']
-
-
 class AppSerializer(serializers.ModelSerializer):
     class Meta:
         model = App
         exclude = ['user']
+
+
+class ContainerSerializer(serializers.ModelSerializer):
+    app = AppSerializer(many=False)
+
+    class Meta:
+        model = Container
+        fields = '__all__'
