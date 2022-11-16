@@ -6,7 +6,6 @@ from jdatetime import datetime
 from manager.serializers import AppSerializer, ContainerSerializer
 from manager.models import App, Container
 
-
 class AppListCreateView(ListCreateAPIView):
     serializer_class = AppSerializer
     # permission_classes = (IsAuthenticated,)
@@ -24,6 +23,14 @@ class AppDetailUpdateDestroyView(RetrieveUpdateDestroyAPIView):
 
     def get_queryset(self):
         return self.request.user.app_set.all()
+
+
+class AppHistoryView(APIView):
+    # permission_classes = (IsAuthenticated,)
+
+    def get(self, request, pk):
+        app = App.objects.get(id=pk)
+        return Response(app.get_history)
 
 
 class ContainerListView(APIView):

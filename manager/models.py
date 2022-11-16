@@ -1,6 +1,8 @@
 from django.db import models
 from django.contrib.auth import get_user_model
 from django_jalali.db import models as jmodels
+from simple_history.models import HistoricalRecords
+from django.forms.models import model_to_dict
 
 class App(models.Model):
     '''
@@ -13,9 +15,22 @@ class App(models.Model):
     command = models.CharField(max_length=360)
     last_run = jmodels.jDateTimeField(null=True, blank=True)
     created_at = jmodels.jDateTimeField('created at', auto_now_add=True)
+    history = HistoricalRecords()
 
     def __str__(self):
         return self.name
+
+    @property
+    def get_history(self):
+        '''Used this property to solve "datetime is not JSON serializable" error'''
+        results = [model_to_dict(history) for history in self.history.all()]
+        histories = []
+        for result in results:
+            result['last_run'] = str(result['last_run'])
+            
+            histories.append(result)
+
+        return histories
 
 
 class Container(models.Model):
