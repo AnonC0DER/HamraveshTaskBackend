@@ -1,4 +1,5 @@
-from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView, GenericAPIView
+from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView
+from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from jdatetime import datetime
@@ -23,3 +24,12 @@ class AppDetailUpdateDestroyView(RetrieveUpdateDestroyAPIView):
 
     def get_queryset(self):
         return self.request.user.app_set.all()
+
+
+class ContainerListView(APIView):
+    # permission_classes = (IsAuthenticated,)
+
+    def get(self, request, pk):
+        containers = Container.objects.filter(app__id=pk)
+        serializer = ContainerSerializer(containers, many=True)
+        return Response(serializer.data, 200)
