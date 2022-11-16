@@ -8,8 +8,12 @@ from manager.serializers import AppSerializer, ContainerSerializer
 from manager.models import App, Container
 
 class AppListCreateView(ListCreateAPIView):
+    '''
+        POST : Create an app, (needs to be authorized)
+        GET : Returns all apps created by the user
+    '''
     serializer_class = AppSerializer
-    # permission_classes = (IsAuthenticated,)
+    permission_classes = (IsAuthenticated,)
 
     def get_queryset(self):
         return self.request.user.app_set.all()
@@ -19,15 +23,24 @@ class AppListCreateView(ListCreateAPIView):
 
 
 class AppDetailUpdateDestroyView(RetrieveUpdateDestroyAPIView):
+    '''
+        GET : Returns app details
+        PUT : Update the app
+        PATCH : Update a specific field of the app
+        DELETE : Delete the app and its containers
+    '''
     serializer_class = AppSerializer
-    # permission_classes = (IsAuthenticated,)
+    permission_classes = (IsAuthenticated,)
 
     def get_queryset(self):
         return self.request.user.app_set.all()
 
 
 class AppHistoryView(APIView):
-    # permission_classes = (IsAuthenticated,)
+    '''
+        Returns changes history of an app 
+    '''
+    permission_classes = (IsAuthenticated,)
 
     def get(self, request, pk):
         app = App.objects.get(id=pk)
@@ -35,7 +48,12 @@ class AppHistoryView(APIView):
 
 
 class RunAppView(APIView):
-    # permission_classes = (IsAuthenticated,)
+    '''
+        Run an app,
+        last_run will be automatically change after each run request,
+        full_docker_command will be automatically set after each run request. 
+    '''
+    permission_classes = (IsAuthenticated,)
 
     def get(self, request, pk):
         app = get_object_or_404(App, id=pk)
@@ -47,7 +65,10 @@ class RunAppView(APIView):
 
 
 class ContainerListView(APIView):
-    # permission_classes = (IsAuthenticated,)
+    '''
+        GET : Returns all the containers connected to the app
+    '''
+    permission_classes = (IsAuthenticated,)
 
     def get(self, request, pk):
         containers = Container.objects.filter(app__id=pk)
