@@ -9,3 +9,19 @@ services:
     image: backend:hamravesh_task
     container_name: backend_hamravesh_task
     command: bash -c "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
+    depends_on:
+      - database
+    environment:
+      - DB_DATABASE=postgres
+      - DB_USERNAME=postgres
+      - DB_PASSWORD=postgres
+  
+  database:
+    image: postgres
+    container_name: postgres_db
+    volumes:
+      - ./data/database:/var/lib/postgresql/pgdata
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=postgres
