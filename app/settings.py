@@ -29,6 +29,7 @@ INSTALLED_APPS = [
 
     'rest_framework', 
     'django_jalali',
+    'docker',
     'drf_yasg',
     'simple_history',
 
